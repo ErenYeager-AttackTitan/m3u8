@@ -1,30 +1,30 @@
-name: Convert M3U8 to MP4 and Push
+name: Convert M3U8 to MP4 and Commit
 
 on:
   workflow_dispatch:
 
 jobs:
-  convert:
+  convert-and-commit:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install ffmpeg
-        run: sudo apt-get install -y ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
 
       - name: Download and convert m3u8 to mp4
         run: |
-          ffmpeg -i "https://ed.netmagcdn.com:2228/hls-playback/74a50cfd4c1c68eb65e43d21048f2e2dad2e8db6b42e757ada8fbfd1b4fb38d74b1c23d794f22381a22e44f43c7733f884ff8df10b0aa2780c9397bedbbc0b5046306b7537466a74aa0dd76252c3ab0651cef9e512ee7955d7aa17e4e8619981b2d3337278e20e5aa6f8464da0f7e328bbc3fd6efd275a5de08c5c189505b8aee3a6bc41adeecb43ff243849767910ad/index-f1-v1-a1.m3u8" -c copy to-be-hero-x-ep-1.mp4
+          mkdir -p output
+          ffmpeg -i "https://ed.netmagcdn.com:2228/hls-playback/74a50cfd4c1c68eb65e43d21048f2e2dad2e8db6b42e757ada8fbfd1b4fb38d74b1c23d794f22381a22e44f43c7733f884ff8df10b0aa2780c9397bedbbc0b5046306b7537466a74aa0dd76252c3ab0651cef9e512ee7955d7aa17e4e8619981b2d3337278e20e5aa6f8464da0f7e328bbc3fd6efd275a5de08c5c189505b8aee3a6bc41adeecb43ff243849767910ad/index-f1-v1-a1.m3u8" -c copy output/to-be-hero-x-ep-1.mp4
 
-      - name: Configure Git
+      - name: Commit and push MP4
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-
-      - name: Add and commit mp4
-        run: |
-          git add to-be-hero-x-19591-ep-1.mp4
-          git commit -m "Add converted mp4"
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          mv output/to-be-hero-x-ep-1.mp4 .
+          git add to-be-hero-x-ep-1.mp4
+          git commit -m "Add converted MP4: To Be Hero X Episode 1"
           git push
           
