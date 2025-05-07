@@ -3,6 +3,9 @@ name: Convert M3U8 to MP4 and Commit
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   convert-and-commit:
     runs-on: ubuntu-latest
